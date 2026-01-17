@@ -1,0 +1,38 @@
+def calculate_grade():
+    try:
+        # 1. Take input from the user
+        # We use float() to allow decimal marks (e.g., 89.5)
+        marks = float(input("Enter the marks obtained (0-100): "))
+
+        # 2. Start the Decision Making Chain
+        
+        # First, handle invalid edge cases
+        if marks > 100 or marks < 0:
+            print("Error: Invalid marks. Please enter a number between 0 and 100.")
+            
+        # Check for Grade A
+        elif marks >= 90:
+            print(f"Marks: {marks} | Grade: A")
+            
+        # Check for Grade B
+        elif marks >= 80:
+            print(f"Marks: {marks} | Grade: B")
+            
+        # Check for Grade C
+        elif marks >= 70:
+            print(f"Marks: {marks} | Grade: C")
+            
+        # Check for Grade D
+        elif marks >= 60:
+            print(f"Marks: {marks} | Grade: D")
+            
+        # If none of the above are true, it must be an F
+        else:
+            print(f"Marks: {marks} | Grade: F (Fail)")
+
+    except ValueError:
+        # Handles cases where user enters text instead of numbers
+        print("Error: Please enter a valid numeric value.")
+
+# Run the function
+calculate_grade()

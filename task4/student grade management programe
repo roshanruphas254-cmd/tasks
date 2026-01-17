@@ -1,0 +1,91 @@
+def calculate_grade(score):
+    """Helper function to determine the grade based on the score."""
+    if 90 <= score <= 100:
+        return 'A'
+    elif 75 <= score < 90:
+        return 'B'
+    elif 60 <= score < 75:
+        return 'C'
+    elif 40 <= score < 60:
+        return 'D'
+    else:
+        return 'F'
+
+def main():
+    print("--- Student Grade Manager ---\n")
+    
+    # 1. Ask how many students
+    while True:
+        try:
+            num_students = int(input("How many students are there? "))
+            if num_students > 0:
+                break
+            print("Please enter a number greater than 0.")
+        except ValueError:
+            print("Invalid input. Please enter a whole number.")
+
+    student_data = []
+
+    # 2. Loop to get data for each student
+    for i in range(num_students):
+        print(f"\nStudent {i + 1}:")
+        name = input("  Enter Name: ")
+        
+        # Input validation for score
+        while True:
+            try:
+                score = float(input(f"  Enter Score for {name} (0-100): "))
+                if 0 <= score <= 100:
+                    break
+                print("  Score must be between 0 and 100.")
+            except ValueError:
+                print("  Invalid input. Please enter a number.")
+        
+        # Assign Grade
+        grade = calculate_grade(score)
+        
+        # Store data
+        student_data.append({
+            'name': name,
+            'score': score,
+            'grade': grade
+        })
+
+    # 3. Perform Calculations
+    total_score = sum(student['score'] for student in student_data)
+    average_score = total_score / num_students
+    
+    # Find highest and lowest using max/min with a key
+    highest_student = max(student_data, key=lambda x: x['score'])
+    lowest_student = min(student_data, key=lambda x: x['score'])
+    
+    # Filter passing students
+    passing_students = [s for s in student_data if s['score'] >= 40]
+
+    # 4. Display Results
+    print("\n" + "="*30)
+    print("       CLASS REPORT")
+    print("="*30)
+    
+    # Detailed Student List
+    print(f"{'Name':<15} {'Score':<10} {'Grade':<5}")
+    print("-" * 30)
+    for student in student_data:
+        print(f"{student['name']:<15} {student['score']:<10} {student['grade']:<5}")
+    print("-" * 30)
+
+    # Statistics
+    print(f"\nAverage Score: {average_score:.2f}")
+    print(f"Highest Score: {highest_student['score']} ({highest_student['name']})")
+    print(f"Lowest Score:  {lowest_student['score']} ({lowest_student['name']})")
+    
+    # Passing Students
+    print("\nStudents who passed:")
+    if passing_students:
+        for p in passing_students:
+            print(f"- {p['name']}")
+    else:
+        print("None")
+
+if __name__ == "__main__":
+    main()

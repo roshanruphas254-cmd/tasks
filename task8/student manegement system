@@ -1,0 +1,84 @@
+def display_menu():
+    print("\n--- Student Management System ---")
+    print("1. Add Student")
+    print("2. View All Students")
+    print("3. Update Student")
+    print("4. Delete Student")
+    print("5. Exit")
+
+def add_student(students):
+    roll_no = input("Enter Roll Number: ")
+    
+    if roll_no in students:
+        print(f"Error: Student with Roll No {roll_no} already exists.")
+        return
+
+    name = input("Enter Name: ")
+    try:
+        marks = float(input("Enter Marks: "))
+        # Storing details in a dictionary
+        students[roll_no] = {'name': name, 'marks': marks}
+        print(f"Student {name} added successfully!")
+    except ValueError:
+        print("Invalid input for marks. Please enter a number.")
+
+def view_students(students):
+    if not students:
+        print("No records found.")
+    else:
+        print("\n{:<15} {:<20} {:<10}".format("Roll No", "Name", "Marks"))
+        print("-" * 45)
+        for roll_no, details in students.items():
+            print(f"{roll_no:<15} {details['name']:<20} {details['marks']:<10}")
+
+def update_student(students):
+    roll_no = input("Enter Roll Number to update: ")
+    
+    if roll_no in students:
+        print(f"Current Details: Name: {students[roll_no]['name']}, Marks: {students[roll_no]['marks']}")
+        name = input("Enter new Name (leave blank to keep current): ")
+        marks_input = input("Enter new Marks (leave blank to keep current): ")
+
+        if name:
+            students[roll_no]['name'] = name
+        if marks_input:
+            try:
+                students[roll_no]['marks'] = float(marks_input)
+            except ValueError:
+                print("Invalid marks entered. Marks not updated.")
+        
+        print("Student details updated successfully!")
+    else:
+        print("Student not found.")
+
+def delete_student(students):
+    roll_no = input("Enter Roll Number to delete: ")
+    
+    if roll_no in students:
+        del students[roll_no]
+        print("Student deleted successfully!")
+    else:
+        print("Student not found.")
+
+def main():
+    students = {}  # This dictionary acts as our database
+    while True:
+        display_menu()
+        choice = input("Enter your choice (1-5): ")
+
+        if choice == '1':
+            add_student(students)
+        elif choice == '2':
+            view_students(students)
+        elif choice == '3':
+            update_student(students)
+        elif choice == '4':
+            delete_student(students)
+        elif choice == '5':
+            print("Exiting system. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()

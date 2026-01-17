@@ -1,0 +1,117 @@
+import json
+import os
+
+# The file where data will be stored
+DATABASE_FILE = "library_data.json"
+
+def load_books():
+    """Loads book data from the JSON file into a dictionary."""
+    if not os.path.exists(DATABASE_FILE):
+        return {}  # Return empty dict if file doesn't exist
+    try:
+        with open(DATABASE_FILE, 'r') as file:
+            return json.load(file)
+    except (json.JSONDecodeError, IOError):
+        return {}
+
+def save_books(books):
+    """Saves the current book dictionary to the JSON file."""
+    try:
+        with open(DATABASE_FILE, 'w') as file:
+            json.dump(books, file, indent=4)
+    except IOError as e:
+        print(f"Error saving data: {e}")
+
+def add_book(books):
+    """Adds a new book record."""
+    book_id = input("Enter Book ID: ").strip()
+    if book_id in books:
+        print(f"Error: Book ID {book_id} already exists.")
+        return
+
+    title = input("Enter Book Title: ").strip()
+    author = input("Enter Author Name: ").strip()
+    
+    # Status is 'Available' by default
+    books[book_id] = {
+        "Title": title,
+        "Author": author,
+        "Status": "Available"
+    }
+    save_books(books)
+    print(f"Book '{title}' added successfully!")
+
+def view_books(books):
+    """Displays all books in a formatted table."""
+    if not books:
+        print("\nNo books found in the library.")
+        return
+
+    print("\n" + "-"*60)
+    print(f"{'ID':<10} {'Title':<25} {'Author':<15} {'Status':<10}")
+    print("-"*60)
+    
+    for book_id, details in books.items():
+        print(f"{book_id:<10} {details['Title']:<25} {details['Author']:<15} {details['Status']:<10}")
+    print("-"*60)
+
+def issue_book(books):
+    """Updates book status to 'Issued'."""
+    book_id = input("Enter Book ID to issue: ").strip()
+    
+    if book_id not in books:
+        print("Error: Book not found.")
+        return
+
+    if books[book_id]['Status'] == 'Issued':
+        print(f"Error: Book '{books[book_id]['Title']}' is already issued.")
+    else:
+        books[book_id]['Status'] = 'Issued'
+        save_books(books)
+        print(f"Book '{books[book_id]['Title']}' issued successfully.")
+
+def return_book(books):
+    """Updates book status to 'Available'."""
+    book_id = input("Enter Book ID to return: ").strip()
+    
+    if book_id not in books:
+        print("Error: Book not found.")
+        return
+
+    if books[book_id]['Status'] == 'Available':
+        print(f"Error: Book '{books[book_id]['Title']}' was not issued.")
+    else:
+        books[book_id]['Status'] = 'Available'
+        save_books(books)
+        print(f"Book '{books[book_id]['Title']}' returned successfully.")
+
+def main_menu():
+    """Main program loop."""
+    books = load_books()
+    
+    while True:
+        print("\n=== Library Management System ===")
+        print("1. Add New Book")
+        print("2. View All Books")
+        print("3. Issue Book")
+        print("4. Return Book")
+        print("5. Exit")
+        
+        choice = input("Enter your choice (1-5): ").strip()
+        
+        if choice == '1':
+            add_book(books)
+        elif choice == '2':
+            view_books(books)
+        elif choice == '3':
+            issue_book(books)
+        elif choice == '4':
+            return_book(books)
+        elif choice == '5':
+            print("Exiting system. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main_menu()

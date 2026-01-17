@@ -1,0 +1,61 @@
+def display_menu():
+    print("\n--- To-Do List Menu ---")
+    print("1. Add a new task")
+    print("2. View tasks")
+    print("3. Delete a task")
+    print("4. Exit")
+
+def main():
+    # Initialize an empty list to store tasks
+    tasks = []
+
+    while True:
+        display_menu()
+        choice = input("Enter your choice (1-4): ")
+
+        if choice == '1':
+            # Add Task
+            task = input("Enter the task description: ")
+            tasks.append(task)
+            print(f"Task '{task}' added!")
+
+        elif choice == '2':
+            # View Tasks
+            print("\n--- Your Tasks ---")
+            if not tasks:
+                print("Your to-do list is empty.")
+            else:
+                # enumerate gives us both the index (i) and the task
+                for i, task in enumerate(tasks, start=1):
+                    print(f"{i}. {task}")
+
+        elif choice == '3':
+            # Delete Task
+            print("\n--- Delete Task ---")
+            if not tasks:
+                print("No tasks to delete.")
+            else:
+                # Show tasks first so user knows the number
+                for i, task in enumerate(tasks, start=1):
+                    print(f"{i}. {task}")
+                
+                try:
+                    task_num = int(input("Enter the number of the task to delete: "))
+                    if 1 <= task_num <= len(tasks):
+                        removed_task = tasks.pop(task_num - 1)
+                        print(f"Task '{removed_task}' deleted.")
+                    else:
+                        print("Invalid task number.")
+                except ValueError:
+                    print("Please enter a valid number.")
+
+        elif choice == '4':
+            # Exit
+            print("Exiting program. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
+
+if __name__ == "__main__":
+    main()
